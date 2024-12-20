@@ -1,0 +1,39 @@
+services:
+
+  nginx:
+    restart: always
+    build:
+      dockerfile: infra/proxy.Dockerfile
+      context: ..
+    ports:
+      - 80:80
+
+  db:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - ./db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+
+  oracle:
+    restart: on-failure:5
+    build:
+      context: ../leak_oracle
+      dockerfile: app.Dockerfile
+    depends_on:
+      - db
+  
+  provisionner:
+    build:
+      context: ../leak_provisionner
+      dockerfile: app.Dockerfile
+    volumes:
+      - ./files:/app/files
+    command: /app/main load_passwords_from_file -f /app/files/rockyou.txt

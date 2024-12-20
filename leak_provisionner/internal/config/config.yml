@@ -1,0 +1,13 @@
+app:
+  name: HaveIBeenRocked - Leak Provisionner Service
+  version: 1.0.0
+
+  log:
+    level: debug
+
+  file_reader:
+    password_batch_size: 50000
+    
+  grpc_server:
+    host: oracle
+    port: 50051

@@ -1,0 +1,21 @@
+app:
+  name: HaveIBeenRocked - Leak Oracle Service
+  version: 1.0.0
+
+  database:
+    host: db
+    port: 5432
+    user: postgres
+    password: password
+    retry_timeout: 3
+    max_idle_conns: 10
+    max_open_conns: 100
+
+  log:
+    level: info
+    
+  grpc:
+    port: 50051
+
+  http:
+    port: 8080
